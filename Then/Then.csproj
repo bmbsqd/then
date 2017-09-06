@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <Title>Promise like Task extensions</Title>
+    <Summary>Promise like task extensions such as Then() Tap() and Catch()</Summary>
     <TargetFramework>netstandard1.3</TargetFramework>
     <Authors>Jonas Frost</Authors>
     <Company>Bombsquad Inc</Company>
