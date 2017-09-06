@@ -14,6 +14,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/bmbsqd/then</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
