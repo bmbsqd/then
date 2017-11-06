@@ -19,4 +19,8 @@
     <Version>1.0.3</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
+  </ItemGroup>
+
 </Project>

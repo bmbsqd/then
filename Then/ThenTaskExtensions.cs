@@ -10,11 +10,27 @@ namespace System.Threading.Tasks {
 			return selector( result ).Invoke();
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static async ValueTask<TResult> Then<T, TResult>(this ValueTask<T> task, Func<T, Func<TResult>> selector)
+		{
+			var result = task.IsCompletedSuccessfully ? task.Result : await task.ConfigureAwait( false );
+			return selector(result).Invoke();
+		}
+
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static async Task<TResult> Then<T, TResult>( this Task<T> task, Func<T, Func<Task<TResult>>> selector )
 		{
 			var result = await task.ConfigureAwait( false );
 			return await selector( result ).Invoke().ConfigureAwait( false );
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static async ValueTask<TResult> Then<T, TResult>(this ValueTask<T> task, Func<T, Func<ValueTask<TResult>>> selector)
+		{
+			var result = task.IsCompletedSuccessfully ? task.Result : await task.ConfigureAwait(false);
+
+			var selectorTask = selector( result ).Invoke();
+			return selectorTask.IsCompletedSuccessfully ? selectorTask.Result : await selectorTask.ConfigureAwait( false );
 		}
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -24,11 +40,26 @@ namespace System.Threading.Tasks {
 			return then( result );
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static async ValueTask<TResult> Then<T, TResult>(this ValueTask<T> task, Func<T, TResult> then)
+		{
+			var result = task.IsCompletedSuccessfully ? task.Result : await task.ConfigureAwait(false);
+			return then(result);
+		}
+
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static async Task<TResult> Then<T, TResult>( this Task<T> task, Func<T, Task<TResult>> then )
 		{
 			var result = await task.ConfigureAwait( false );
 			return await then( result ).ConfigureAwait( false );
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static async ValueTask<TResult> Then<T, TResult>(this ValueTask<T> task, Func<T, ValueTask<TResult>> then)
+		{
+			var result = task.IsCompletedSuccessfully ? task.Result : await task.ConfigureAwait(false);
+			var thenTask = then( result );
+			return thenTask.IsCompletedSuccessfully ? thenTask.Result : await thenTask.ConfigureAwait( false );
 		}
 
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]

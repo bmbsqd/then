@@ -38,6 +38,18 @@ namespace System.Threading.Tasks {
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static async ValueTask<T> Catch<T, TException>(this ValueTask<T> task, Func<TException, T> exceptionHandler) where TException : Exception
+		{
+			try {
+				return task.IsCompletedSuccessfully ? task.Result : await task.ConfigureAwait( false );
+			}
+			catch (TException e)
+			{
+				return exceptionHandler(e);
+			}
+		}
+
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		public static Task Catch( this Task task, Action<Exception> exceptionHandler ) => task.Catch<Exception>( exceptionHandler );
 
